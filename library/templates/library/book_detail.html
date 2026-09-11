@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ book.title }}</title>
+</head>
+<body>
+    <h1>{{ book.title }}</h1>
+
+    <h2>Autor</h2>
+    <p><strong>Nombre:</strong> {{ book.author.name }}</p>
+    <p><strong>Fecha de nacimiento:</strong> {{ book.author.birth_date }}</p>
+    <p><strong>Nacionalidad:</strong> {{ book.author.nationality }}</p>
+    {% if book.author.profile %}
+        <p><strong>Biografía:</strong> {{ book.author.profile.bio }}</p>
+        <p><strong>Sitio web:</strong> {{ book.author.profile.website }}</p>
+    {% endif %}
+
+    <h2>Categorías</h2>
+    <ul>
+        {% for category in book.categories.all %}
+            <li>{{ category.name }}</li>
+        {% empty %}
+            <li>Sin categorías</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Editorial</h2>
+    <ul>
+        {% for publication in book.publication_set.all %}
+            <li>
+                {{ publication.publisher.name }}
+                ({{ publication.date }} - {{ publication.edition }})
+            </li>
+        {% empty %}
+            <li>Sin editorial</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
