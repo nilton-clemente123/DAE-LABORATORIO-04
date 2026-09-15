@@ -274,12 +274,34 @@ La vista `book_detail` (URL `/book/<pk>/`) renderiza la plantilla `library/templ
 ## 7. Capturas de pantalla requeridas
 
 1. **Admin de Django** (`http://127.0.0.1:8000/admin/`) mostrando los modelos registrados.
+
+<img width="960" height="470" alt="image" src="https://github.com/user-attachments/assets/463f4c26-4725-4b0a-820d-009b629b6209" />
+
 2. **Listado de libros** en el admin con los 4 libros cargados.
+
+<img width="1891" height="492" alt="image" src="https://github.com/user-attachments/assets/d0e04348-dd12-487b-9e1d-c71f91122090" />
+
 3. **Detalle de un libro** en el admin mostrando las categorías seleccionadas.
+
+<img width="1872" height="828" alt="image" src="https://github.com/user-attachments/assets/6a09f849-a534-4a00-bf47-5297d6ea3868" />
+
 4. **Consola de Django** con las consultas de ida, vuelta y filtrado.
+
+<img width="881" height="658" alt="image" src="https://github.com/user-attachments/assets/8b3dad45-bf78-42ce-baa2-9afeaa1afdab" />
+
 5. **Consola de Django** con la prueba de borrado CASCADE.
+
+<img width="797" height="332" alt="image" src="https://github.com/user-attachments/assets/7df8ed9f-c4ac-4db2-8a68-13b2aefb4913" />
+
 6. **Consola de Django** con la prueba de borrado PROTECT (ProtectedError).
+
+<img width="907" height="221" alt="image" src="https://github.com/user-attachments/assets/64a2693e-7775-4f02-bfc9-77c7aa71cace" />
+
 7. **Página de detalle del libro** (`http://127.0.0.1:8000/book/1/`) renderizada.
+
+<img width="833" height="600" alt="image" src="https://github.com/user-attachments/assets/df8d7db8-116a-4ac4-8f58-cb0237cbdd73" />
+
+
 
 ## 8. Credenciales del superusuario
 
