@@ -1,5 +1,44 @@
 # Laboratorio 4 DAE — Relaciones entre modelos en Django
 
+## 0. Requisitos y cómo reproducir
+
+**Entorno:**
+
+- Python 3.11
+- Django 5.2.x y Pillow (ver `requirements.txt`)
+
+```bash
+python -m venv venv
+venv\Scripts\activate              # Windows
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py createsuperuser   # usuario: admin / contraseña: admin123
+python manage.py runserver
+```
+
+**Carga de datos de prueba:**
+
+- Desde `/admin/` (todos los modelos están registrados en `library/admin.py`), o ejecutando:
+
+```bash
+python load_data.py
+```
+
+**Consultas y pruebas registradas:**
+
+```bash
+python test_consultas.py   # consultas de ida, vuelta y filtrado (punto 9)
+python test_protect.py     # prueba de borrado con PROTECT (punto 10)
+python test_view.py        # renderizado de la plantilla de detalle (punto 11)
+```
+
+> **Nota sobre la versión:** el encabezado autogenerado de `config/settings.py` menciona
+> Django 6.1.1, pero esa versión no está publicada en PyPI. El proyecto se ejecuta y valida con
+> Django 5.2.17 (última estable/LTS disponible). Se añadió
+> `DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'` para mantener la coherencia de las migraciones.
+
+---
+
 ## 1. Diagrama de modelos
 
 ```mermaid
@@ -94,6 +133,15 @@ erDiagram
 | Book ↔ Category | `ManyToManyField` | `related_name='libros'` (tabla intermedia automática `library_book_categories`) |
 | Book ↔ Publisher | `ManyToManyField` con `through='Publication'` | El modelo intermedio `Publication` guarda `date` y `edition` |
 
+### Justificación de las decisiones
+
+Cada relación se eligió según la cardinalidad real del caso:
+
+- **`Book → Author` como `ForeignKey`** — un libro tiene exactamente un autor, pero un autor escribe muchos libros (uno-a-muchos). El `ForeignKey` vive en `Book` (el lado "muchos"). No podría ser `OneToOneField` (un autor podría tener un único libro) ni `ManyToManyField` (un libro tendría varios autores). Se usa `on_delete=PROTECT` para impedir borrar un autor que aún tiene libros y evitar perder catálogo por accidente.
+- **`AuthorProfile → Author` como `OneToOneField`** — cada autor tiene un único perfil biográfico y cada perfil pertenece a un único autor. Un `ForeignKey` permitiría varios perfiles por autor (o el mismo perfil para varios autores), lo que no corresponde al caso; el `OneToOneField` garantiza la exclusividad y el acceso directo `author.profile`. Se usa `on_delete=CASCADE` porque el perfil no tiene sentido sin su autor.
+- **`Book ↔ Category` como `ManyToManyField`** — un libro puede estar en varias categorías y una categoría contiene varios libros (muchos-a-muchos). Un `ForeignKey` obligaría a una sola categoría por libro. Como la relación no necesita atributos propios, se deja la tabla intermedia automática (`library_book_categories`).
+- **`Book ↔ Publisher` como `ManyToManyField` con `through='Publication'`** — también es muchos-a-muchos (un libro puede tener varias ediciones/publicaciones y una editorial publica varios libros), pero aquí la relación tiene **datos propios** (`date` y `edition`). Por eso se usa `through` apuntando al modelo intermedio `Publication`, que guarda esos atributos y se consulta desde ambos lados (`book.publication_set.all()` y `publisher.publication_set.all()`, además del acceso inverso `publisher.libros.all()`).
+
 ## 3. Tablas creadas en la base de datos
 
 ```
@@ -107,6 +155,8 @@ library_publisher
 ```
 
 ## 4. Consultas registradas en la consola de Django
+
+> Estas consultas se pueden reproducir ejecutando `python test_consultas.py`.
 
 ### Consulta de ida (libro.autor)
 
@@ -154,6 +204,8 @@ CONSULTA DE FILTRADO (doble guion bajo):
 ```
 
 ## 5. Prueba de borrado: CASCADE vs PROTECT
+
+> Reproducible con `python test_cascade.py` (CASCADE) y `python test_protect.py` (PROTECT).
 
 ### Con `on_delete=CASCADE`
 
