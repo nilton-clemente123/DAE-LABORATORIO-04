@@ -1,44 +1,5 @@
 # Laboratorio 4 DAE — Relaciones entre modelos en Django
 
-## 0. Requisitos y cómo reproducir
-
-**Entorno:**
-
-- Python 3.11
-- Django 5.2.x y Pillow (ver `requirements.txt`)
-
-```bash
-python -m venv venv
-venv\Scripts\activate              # Windows
-pip install -r requirements.txt
-python manage.py migrate
-python manage.py createsuperuser   # usuario: admin / contraseña: admin123
-python manage.py runserver
-```
-
-**Carga de datos de prueba:**
-
-- Desde `/admin/` (todos los modelos están registrados en `library/admin.py`), o ejecutando:
-
-```bash
-python load_data.py
-```
-
-**Consultas y pruebas registradas:**
-
-```bash
-python test_consultas.py   # consultas de ida, vuelta y filtrado (punto 9)
-python test_protect.py     # prueba de borrado con PROTECT (punto 10)
-python test_view.py        # renderizado de la plantilla de detalle (punto 11)
-```
-
-> **Nota sobre la versión:** el encabezado autogenerado de `config/settings.py` menciona
-> Django 6.1.1, pero esa versión no está publicada en PyPI. El proyecto se ejecuta y valida con
-> Django 5.2.17 (última estable/LTS disponible). Se añadió
-> `DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'` para mantener la coherencia de las migraciones.
-
----
-
 ## 1. Diagrama de modelos
 
 ```mermaid
